@@ -1,6 +1,5 @@
 # Part III : Storage is still disks in 2025
-
-> Titre de la partie en référence au fait que le cloud est partout mais bon, c'est toujours des disques durs derrière ça n'a pas bougé. Un skill donc toujours primordial.
+artout mais bon, c'est toujours des disques durs derrière ça n'a pas bougé. Un skill donc toujours primordial.
 
 Dans cette partie, on joue avec le stockage de la machine. Au menu : mumuse avec des disques et des partitions, formatage, scénario de remplissage de partition.
 
@@ -16,11 +15,8 @@ Dans cette partie, on joue avec le stockage de la machine. Au menu : mumuse avec
 
 ![Partitions](./img/partition.png)
 
+> Titre de la partie en référence au fait que le cloud est p
 ## 1. LVM
-
-*LVM* (pour *Logical Volume Manager*) est l'outil de référence aujourd'hui sous Linux pour créer et gérer les partitions des disques.
-
-> Il a beaucoup beaucoup trop de features de fou, il se contente pas de couper des disques !
 
 🌞 **Afficher l'état actuel de LVM**
 

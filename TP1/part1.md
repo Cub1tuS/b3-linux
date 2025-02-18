@@ -1,3 +1,16 @@
+# Part I : Rocky install
+
+## Index
+
+- [Part I : Rocky install](#part-i--rocky-install)
+  - [Index](#index)
+  - [1. Install instructions](#1-install-instructions)
+  - [2. Proofs](#2-proofs)
+
+## 1. Install instructions
+
+**FAIT !**
+
 ## 2. Proofs
 🌞 **Prouvez que le schéma de partitionnement a bien été appliqué**
 
