@@ -311,6 +311,9 @@ Writing superblocks and filesystem accounting information: done
 
 🌞 **Proposez au moins une option de montage**
 
-- au moment où on monte la partition (avec fstab ou la commande `mount`), on peut choisir des options de montage
-- proposez au moins une option de montage qui augmente le niveau de sécurité lors de l'utilisation de la partition
-- je rappelle que la partition ne contiendra que des fichiers HTML
+```bash
+[root@node1 ~]# mount -o ro,noexec /dev/rl/web /var/www/
+```
+
+>ro = Lecture seulement
+>noexec = Empêche l'exécution de binaire
