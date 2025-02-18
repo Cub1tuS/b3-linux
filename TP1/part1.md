@@ -9,23 +9,24 @@
 
 ## 1. Install instructions
 
-**FAIT !**
+**(RE)FAIT !**
 
 ## 2. Proofs
 🌞 **Prouvez que le schéma de partitionnement a bien été appliqué**
 
 ```bash
 [root@node1 ~]# df -h
-Filesystem      Size  Used Avail Use% Mounted on
-devtmpfs        4.0M     0  4.0M   0% /dev
-tmpfs           820M     0  820M   0% /dev/shm
-tmpfs           328M  4.8M  323M   2% /run
-efivarfs        256K   32K  225K  13% /sys/firmware/efi/efivars
-/dev/nvme0n1p2  9.8G  1.5G  7.8G  16% /
-/dev/nvme0n1p3  4.9G   24K  4.6G   1% /home
-/dev/nvme0n1p4  4.9G  142M  4.5G   4% /var
-/dev/nvme0n1p1 1022M  7.3M 1015M   1% /boot/efi
-tmpfs           164M     0  164M   0% /run/user/0
+Filesystem           Size  Used Avail Use% Mounted on
+devtmpfs             4.0M     0  4.0M   0% /dev
+tmpfs                317M     0  317M   0% /dev/shm
+tmpfs                127M  3.6M  124M   3% /run
+efivarfs             256K   33K  224K  13% /sys/firmware/efi/efivars
+/dev/mapper/rl-root  9.8G  1.3G  8.0G  14% /
+/dev/nvme0n1p2       974M  247M  660M  28% /boot
+/dev/nvme0n1p1      1022M  7.3M 1015M   1% /boot/efi
+/dev/mapper/rl-home  4.9G   40K  4.6G   1% /home
+/dev/mapper/rl-var   4.9G  141M  4.5G   3% /var
+tmpfs                 64M     0   64M   0% /run/user/0
 ```
 
 🌞 **Mettre en évidence la ligne de configuration `sudo` qui concerne le groupe `wheel`**

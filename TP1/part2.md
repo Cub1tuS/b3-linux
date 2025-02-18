@@ -20,11 +20,11 @@
 [root@node1 network-scripts]# ip a
 [...]
 2: ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 00:0c:29:91:0b:cc brd ff:ff:ff:ff:ff:ff
+    link/ether 00:0c:29:29:c0:f9 brd ff:ff:ff:ff:ff:ff
     altname enp2s0
     inet 10.1.1.11/24 brd 10.1.1.255 scope global noprefixroute ens160
        valid_lft forever preferred_lft forever
-    inet6 fe80::20c:29ff:fe91:bcc/64 scope link 
+    inet6 fe80::20c:29ff:fe29:c0f9/64 scope link 
        valid_lft forever preferred_lft forever
 [...]
 ```
