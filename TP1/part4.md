@@ -443,3 +443,5 @@ Gérer correctement les permissions des fichiers est une étape essentielle dans
 - ça se fait avec les attributs étendus
 - "immuable" ça veut dire qu'il ne peut plus être modifié DU TOUT : il est donc en read-only
 - prouvez que le fichier ne peut plus être modifié par **personne**
+
+[Part 4](part4.md)

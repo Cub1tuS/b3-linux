@@ -56,3 +56,5 @@ en_US.UTF-8
 [root@node1 ~]# firewall-cmd --state
 running
 ```
+
+[Part 2](part2.md)
