@@ -197,6 +197,7 @@ Disassembly of section .text:
 [...]
 ```
 
+> Sur ARM, 'call' devient 'bl'
 ```bash
 [dodo@tp2 /]$ objdump -d /usr/bin/ls | grep -E '\bbl\b'
     355c:	940008e6 	bl	58f4 <setlocale@plt+0x1cd4>
@@ -206,16 +207,18 @@ Disassembly of section .text:
     3d1c:	97ffffc1 	bl	3c20 <setlocale@plt>
     3d34:	97fffec3 	bl	3840 <bindtextdomain@plt>
     3d3c:	97ffff19 	bl	39a0 <textdomain@plt>
-
 ```
 
+> Sur ARM, 'syscall' devient 'svc'
 ```bash
-[dodo@tp2 /]$ objdump -d /usr/bin/ls | grep 'syscall'
+[dodo@tp2 /]$ objdump -d /usr/bin/ls | grep 'svc'
 [dodo@tp2 /]$ 
 ```
 
+🌞 **Utiliser `objdump`** sur la librairie Glibc
+
 ```bash
-[dodo@tp2 /]$ objdump -d usr/lib64/libc.so.6 | grep 'syscall'
+[dodo@tp2 /]$ objdump -d usr/lib64/libc.so.6 | grep 'svc'
 0000000000027420 <__GI___syscall_error>:
    3a918:	17ffb2c2 	b	27420 <__GI___syscall_error>
    3afd8:	17ffb112 	b	27420 <__GI___syscall_error>
@@ -228,18 +231,12 @@ Disassembly of section .text:
 [...]
 ```
 
-- mettez en évidence quelques lignes qui contiennent l'instruction `syscall`
-  - il y en a aucune normalement : `ls` ne contient pas directement de syscalls
-  - car il importe la Glibc, qui contient des syscalls, et les appelle avec `call`
+> Close devient 57..
+```bash
+  104930:	d2800728 	mov	x8, #0x39                  	// #57
+  104934:	b89d83a0 	ldursw	x0, [x29, #-40]
+  104938:	b8336a96 	str	w22, [x20, x19]
+  10493c:	d4000001 	svc	#0x0
+```
 
-🌞 **Utiliser `objdump`** sur la librairie Glibc
-
-- vous avez repéré son chemin exact au point d'avant avec `ldd`
-- mettez en évidence quelques lignes qui contiennent l'instruction `syscall`
-  - il devrait y en avoir pas mal
-  - chaque ligne qui contient l'instruction `syscall` est la dernière d'un bloc de code qui est le syscall lui-même
-- trouvez l'instrution `syscall` qui exécute le syscall `close()`
-
-> Pour exécuter un `syscall`, le programme met dans le registre `eax` l'identifiant du syscall (avec l'instruction `mov`) puis exécute l'instruction `syscall`. Vous cherchez donc une instruction `syscall` précédé d'un `mov` qui met l'identifiant de `close()` dans `eax`.
-
-![How it works](./img/syscall_work.jpg)
+[Part2](part2.md)
