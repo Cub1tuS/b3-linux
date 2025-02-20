@@ -217,14 +217,25 @@ dodo:x:1000:1000:dodo:/home/dodo:/bin/bash
 
 🌞 **Créer un utilisateur :**
 
-- doit s'appeler `meow`
-- ne doit appartenir QUE à un groupe nommé `admins`
-- ne doit pas avoir de répertoire personnel utilisable
-- ne doit pas avoir un shell utilisable
+```bash
+[dodo@tp2 ~]$ sudo groupadd admins
 
-> Il s'agit donc ici d'un utilisateur avec lequel on pourra pas se connecter à la machine (ni en console, ni en SSH).
+[dodo@tp2 ~]$ sudo useradd meow -M -G admins -s /sbin/nologin
+```
 
 🌞 **Configuration `sudoers`**
+
+**à terminer !!**
+
+```bash
+meow ALL=(dodo) NOPASSWD: /bin/ls, /bin/cat, /bin/less, /bin/more
+```
+
+```bash
+```
+
+```bash
+```
 
 - ajouter une configuration `sudoers` pour que l'utilisateur `meow` puisse exécuter seulement et uniquement les commandes `ls`, `cat`, `less` et `more` en tant que votre utilisateur
 - ajouter une configuration `sudoers` pour que les membres du groupe `admins` puisse exécuter seulement et uniquement la commande `apt` en tant que `root`
@@ -237,6 +248,9 @@ dodo:x:1000:1000:dodo:/home/dodo:/bin/bash
 
 🌞 **Déjà une configuration faible ?**
 
+**à terminer !!**
+
+
 - l'utilisateur `meow` est en réalité complètement `root` sur la machine hein là. Prouvez-le.
 - proposez une configuration similaire, sans présenter cette faiblesse de configuration
   - vous pouvez ajouter de la configuration
@@ -247,52 +261,101 @@ dodo:x:1000:1000:dodo:/home/dodo:/bin/bash
 
 **Dans un OS, en particulier Linux, on dit souvent que "tout est fichier".**
 
-En effet, que ce soit les programmes (que ce soit `ls`, ou Firefox, ou Steam, ou le kernel), les fichiers personnels, les fichiers de configuration, et bien d'autres, **l'ensemble des composants d'un OS, et tout ce qu'on peut y ajouter se résume à un gros tas de fichiers.**
-
-Gérer correctement les permissions des fichiers est une étape essentielle dans le renforcement d'une machine.
-
-**C'est la première barrière de sécurité, (beaucoup) trop souvent négligée, alors qu'elle est extrêmement efficace et robuste.**
-
 ### A. Listing POSIX permissions
 
 🌞 **Déterminer les permissions des fichiers/dossiers...**
 
-- le fichier qui contient la liste des utilisateurs
-- le fichier qui contient la liste des hashes des mots de passe des utilisateurs
-- le fichier de configuration du serveur OpenSSH
-- le répertoire personnel de l'utilisateur `root`
-- le répertoire personnel de votre utilisateur
-- le programme `ls`
-- le programme `systemctl`
+```bash
+[dodo@tp2 ~]$ ls -l /etc/passwd
+-rw-r--r--. 1 root root 1124 Feb 20 17:17 /etc/passwd
 
-> POSIX c'est le nom d'un standard qui regroupe plein de concepts avec lesquels vous êtes finalement déjà familiers. Les permissions rwx qu'on retrouve sous les OS Linux (et MacOS, et BSD, et d'autres) font partie de ce standard et sont donc appelées "permissions POSIX".
+[dodo@tp2 ~]$ ls -l /etc/shadow
+----------. 1 root root 917 Feb 20 15:59 /etc/shadow
 
-![Windows POSIX](./img/posix_compliant.png)
+[dodo@tp2 ~]$ ls -l /etc/ssh/sshd_config
+-rw-------. 1 root root 3667 Nov  5 04:38 /etc/ssh/sshd_config
+
+[dodo@tp2 ~]$ sudo ls -l /root/
+total 4
+-rw-------. 1 root root 1524 Feb 18 14:38 anaconda-ks.cfg
+
+[dodo@tp2 home]$ ls -l
+total 20
+drwx------. 6 dodo dodo  4096 Feb 20 17:34 dodo
+
+[dodo@tp2 home]$ ls -l /bin/ls
+-rwxr-xr-x. 1 root root 136656 Nov  6 17:29 /bin/ls
+
+[dodo@tp2 home]$ ls -l /bin/systemctl 
+-rwxr-xr-x. 1 root root 334264 Nov 16 02:22 /bin/systemctl
+```
 
 ### B. Protect a file using permissions
 
 🌞 **Restreindre l'accès à un fichier personnel**
 
-- créer un fichier nommé `dont_readme.txt` (avec le contenu de votre choix)
-- il doit se trouver dans un dossier lisible et écrivable par tout le monde
-- faites en sorte que seul votre utilisateur (pas votre groupe) puisse lire ou modifier ce fichier
-- personne ne doit pouvoir l'exécuter
-- prouvez que :
-  - votre utilisateur peut le lire
-  - votre utilisateur peut le modifier
-  - l'utilisateur `meow` ne peut pas y toucher
-  - l'utilisateur `root` peut quand même y toucher
+```bash
+[dodo@tp2 tmp]$ pwd
+/tmp
 
-> C'est l'un des "superpouvoirs" de `root` : contourner les permissions POSIX (les permissions `rwx`). On verra bien assez tôt que `root` n'a pas de "superpouvoirs" mais que ces contournements sont liés à une mécanique qu'on appelle les *capabilites*. C'est pour plus tard ! :)
+[dodo@tp2 tmp]$ ls -l
+total 8
+-rw-------. 1 dodo dodo 14 Feb 20 17:40 dont_readme.txt
+
+[dodo@tp2 tmp]$ cat dont_readme.txt 
+noo u read me
+
+[dodo@tp2 tmp]$ echo "toto" >> dont_readme.txt 
+
+[dodo@tp2 tmp]$ sudo -u meow cat dont_readme.txt 
+cat: dont_readme.txt: Permission denied
+
+[root@tp2 tmp]# cat dont_readme.txt 
+noo u read me
+toto
+```
 
 ### C. Extended attributes
 
 🌞 **Lister tous les programmes qui ont le bit SUID activé**
 
+```bash
+[dodo@tp2 ~]$ find / -type f -perm /4000 -exec ls -l {} \; 2>/dev/null
+-rwsr-xr-x. 1 root root 70336 Dec 17 22:48 /usr/bin/newgrp
+-rwsr-xr-x. 1 root root 69208 Nov  7 01:24 /usr/bin/su
+-rwsr-xr-x. 1 root root 73768 Dec 17 22:48 /usr/bin/gpasswd
+-rwsr-xr-x. 1 root root 69336 May 15  2022 /usr/bin/passwd
+-rwsr-xr-x. 1 root root 68880 Nov  4 19:14 /usr/bin/pkexec
+-rwsr-xr-x. 1 root root 68920 Nov  7 01:24 /usr/bin/mount
+-rwsr-xr-x. 1 root root 68848 Nov  7 01:24 /usr/bin/umount
+-rwsr-xr-x. 1 root root 73512 Dec 17 22:48 /usr/bin/chage
+---s--x--x. 1 root root 205584 Feb 14  2024 /usr/bin/sudo
+-rwsr-xr-x. 1 root root 69296 Dec 17 22:55 /usr/bin/crontab
+-rwsr-xr-x. 1 root root 68832 Nov 26 00:29 /usr/sbin/unix_chkpwd
+-rwsr-xr-x. 1 root root 68704 Feb  4 19:47 /usr/sbin/grub2-set-bootflag
+-rwsr-xr-x. 1 root root 68688 Nov 26 00:29 /usr/sbin/pam_timestamp_check
+-rwsr-xr-x. 1 root root 68824 Nov  4 19:14 /usr/lib/polkit-1/polkit-agent-helper-1
+```
+
 🌞 **Rendre le fichier `dont_readme.txt` immuable**
+
+```bash
+[dodo@tp2 ~]$ sudo chattr +i /tmp/dont_readme.txt
+
+[dodo@tp2 ~]$ lsattr /tmp/dont_readme.txt
+----i---------e------- /tmp/dont_readme.txt
+```
+
+```bash
+[dodo@tp2 ~]$ echo "toto" > /tmp/dont_readme.txt
+-bash: /tmp/dont_readme.txt: Operation not permitted
+[dodo@tp2 ~]$ sudo !!
+sudo echo "toto" > /tmp/dont_readme.txt
+-bash: /tmp/dont_readme.txt: Operation not permitted
+```
 
 - ça se fait avec les attributs étendus
 - "immuable" ça veut dire qu'il ne peut plus être modifié DU TOUT : il est donc en read-only
 - prouvez que le fichier ne peut plus être modifié par **personne**
 
-[Part 4](part4.md)
+[Part 5](part5.md)
