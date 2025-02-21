@@ -225,37 +225,48 @@ dodo:x:1000:1000:dodo:/home/dodo:/bin/bash
 
 🌞 **Configuration `sudoers`**
 
-**à terminer !!**
-
 ```bash
-meow ALL=(dodo) NOPASSWD: /bin/ls, /bin/cat, /bin/less, /bin/more
+[dodo@tp2 ~]$ sudo -u meow sudo -l
+Matching Defaults entries for meow on tp2:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY
+    HOSTNAME HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE",
+    env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC
+    LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User meow may run the following commands on tp2:
+    (dodo) /bin/ls, /bin/cat, /bin/less, /bin/more
+    (root) /bin/dnf
+
+[dodo@tp2 ~]$ groups meow
+meow : meow admins
 ```
 
 ```bash
+[dodo@tp2 ~]$ sudo -l
+Matching Defaults entries for dodo on tp2:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY
+    HOSTNAME HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE",
+    env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC
+    LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User dodo may run the following commands on tp2:
+    (root) NOPASSWD: ALL
+    (ALL) ALL
 ```
-
-```bash
-```
-
-- ajouter une configuration `sudoers` pour que l'utilisateur `meow` puisse exécuter seulement et uniquement les commandes `ls`, `cat`, `less` et `more` en tant que votre utilisateur
-- ajouter une configuration `sudoers` pour que les membres du groupe `admins` puisse exécuter seulement et uniquement la commande `apt` en tant que `root`
-- ajouter une configuration `sudoers` pour que votre utilisateur puisse exécuter n'importe quel commande en tant `root`, sans avoir besoin de saisir un mot de passe
-- prouvez que ces 3 configurations ont pris effet (vous devez vous authentifier avec le bon utilisateur, et faire une commande `sudo` qui doit fonctioner correctement)
-
-> Pour chaque point précédent, c'est une seule ligne de configuration à ajouter dans le fichier `sudoers` de la machine.
 
 ### C. Hackers gonna hack
 
 🌞 **Déjà une configuration faible ?**
 
-**à terminer !!**
-
-
-- l'utilisateur `meow` est en réalité complètement `root` sur la machine hein là. Prouvez-le.
-- proposez une configuration similaire, sans présenter cette faiblesse de configuration
-  - vous pouvez ajouter de la configuration
-  - ou supprimer de la configuration
-  - du moment qu'on garde des fonctionnalités à peu près équivalentes !
+```bash
+[dodo@tp2 ~]$ sudo su -s /bin/bash meow
+bash-5.1$ sudo -u dodo less /etc/profile
+!/bin/bash
+[dodo@tp2 ~]$ sudo su
+[root@tp2 dodo]#
+```
 
 ## 2. Files and permissions
 
@@ -353,9 +364,5 @@ toto
 sudo echo "toto" > /tmp/dont_readme.txt
 -bash: /tmp/dont_readme.txt: Operation not permitted
 ```
-
-- ça se fait avec les attributs étendus
-- "immuable" ça veut dire qu'il ne peut plus être modifié DU TOUT : il est donc en read-only
-- prouvez que le fichier ne peut plus être modifié par **personne**
 
 [Part 5](part5.md)
