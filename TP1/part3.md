@@ -105,7 +105,6 @@
 ```bash
 [root@node1 ~]# blkid /dev/rl/root 
 /dev/rl/root: UUID="74e9473b-e9c4-4c3a-9c62-67eeb22ed497" TYPE="ext4"
-[root@node1 ~]# man blkid
 [root@node1 ~]# blkid /dev/rl/home
 /dev/rl/home: UUID="07bcff5e-7564-48bf-896b-bfa2dddf80e2" TYPE="ext4"
 ```
@@ -114,7 +113,7 @@
 
 🌞 **Remplissez votre partition `/home`**
 
-```
+```bash
 dd if=/dev/zero of=/home/dodo/bigfile bs=4M count=2500
 ```
 

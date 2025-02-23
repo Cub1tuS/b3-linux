@@ -1,13 +1,5 @@
 # Part V : OpenSSH Server
 
-**Le serveur OpenSSH est strictement nécessaire à l'administration, et occupe aussi une place cruciale dans le niveau de sécurité d'une machine.**
-
-En effet, on parle d'un programme qui tourne en `root` (obligé...), qui écoute sur un port réseau (il est donc attaquable, c'est une porte potentiellement ouverte), et qui en plus, bah sert à prendre le contrôle d'une machine à distance.
-
-Besoin d'un dessin pour expliquer à quel point c'est sensible ?
-
-Néanmoins nécessaire partout.
-
 ## Index
 
 - [Part V : OpenSSH Server](#part-v--openssh-server)
